@@ -3,32 +3,8 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-
-#define SCREEN_WIDTH 320
-#define SCREEN_HEIGHT 240
-#define WINDOW_SIZE_FACTOR 3
-
-class Canvas
-{
-    sf::Texture canvasT;
-    sf::Sprite canvasS;
-
-public:
-    sf::Image canvasI;
-    Canvas()
-    {
-        canvasI.create(SCREEN_WIDTH, SCREEN_HEIGHT, (sf::Color){255, 0, 0, 255});
-        canvasT.loadFromImage(canvasI);
-        canvasS.setTexture(canvasT);
-        canvasS.scale(WINDOW_SIZE_FACTOR, WINDOW_SIZE_FACTOR);
-    }
-
-    void draw(sf::RenderWindow *window)
-    {
-        canvasT.loadFromImage(canvasI);
-        window->draw(canvasS);
-    }
-};
+#include "constants.hpp"
+#include "canvas.hpp"
 
 class Program
 {
