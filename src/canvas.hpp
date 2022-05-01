@@ -37,4 +37,9 @@ public:
 
         canvasI.setPixel(x, y, color);
     }
+
+    void clear(sf::Color color)
+    {
+        canvasI.create(SCREEN_WIDTH, SCREEN_HEIGHT, color);
+    }
 };

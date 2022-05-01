@@ -9,6 +9,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
 
 #include <vector>
 
@@ -18,6 +19,7 @@ class Program
     Canvas canvas;
     FPSCounter fpsCounter;
     Cube cube;
+    Camera camera;
 
     void checkForExitConditions(void)
     {
@@ -44,7 +46,7 @@ public:
                           SCREEN_HEIGHT * WINDOW_SIZE_FACTOR),
             "3D CAMERA!!!");
         window->setFramerateLimit(60);
-        cube.initCube(100, 2);
+        cube.initCube(30, 1);
     }
 
     void runMainLoop(void)
@@ -53,7 +55,8 @@ public:
         while (window->isOpen())
         {
             checkForExitConditions();
-            cube.draw(canvas);
+            canvas.clear((sf::Color){255, 0, 0});
+            cube.draw(canvas, camera);
             canvas.draw(window);
             fpsCounter.draw(window);
             window->display();
