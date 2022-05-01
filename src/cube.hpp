@@ -22,12 +22,8 @@ public:
     glm::mat4 rotation;
     glm::mat4 transform;
 
-    float rotationY = 0.0;
-
     void updateTransform()
     {
-        rotationY += 0.01;
-        rotation = glm::rotate(glm::mat4(1.0), rotationY, glm::vec3(0, 1, 0));
         transform = translate * rotation;
     }
 
@@ -47,6 +43,12 @@ public:
                 for (float z = -halfSize; z < halfSize; z += step)
                     cube.emplace_back((glm::vec3){x, y, z});
     }
+
+    void rotate(float angle, glm::vec3 axis)
+    {
+        rotation = glm::rotate(glm::mat4(1.0), angle, axis);
+    }
+
     void draw(Canvas &canvas, Camera camera)
     {
         updateTransform();

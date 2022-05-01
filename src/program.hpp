@@ -79,12 +79,16 @@ public:
     void runMainLoop(void)
     {
         sf::Clock clock;
+        float cubeRotation = 0;
         while (window->isOpen())
         {
             auto time = clock.restart();
             checkForExitConditions();
             handleKeyboardEvents(time.asSeconds());
-            canvas.clear((sf::Color){255, 0, 0});
+            canvas.clear();
+            cubeRotation += 0.5f * time.asSeconds();
+            cube.rotate(cubeRotation, glm::vec3(1, 1, 1));
+            cube.updateTransform();
             cube.draw(canvas, camera);
             canvas.draw(window);
             fpsCounter.draw(window);
