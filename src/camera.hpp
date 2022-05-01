@@ -9,10 +9,10 @@
 class Camera
 {
     glm::mat4 projection;
-    glm::vec3 position;
     float fov;
 
 public:
+    glm::vec3 position;
     glm::vec4 renderPlane;
     glm::mat4 transform;
 

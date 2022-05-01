@@ -20,6 +20,8 @@ class Program
     FPSCounter fpsCounter;
     Cube cube;
     Camera camera;
+    glm::vec3 cameraPosition = camera.position;
+    float cameraSpeed = 50.f;
 
     void checkForExitConditions(void)
     {
@@ -38,6 +40,31 @@ class Program
         }
     }
 
+    void handleKeyboardEvents(float deltaTime)
+    {
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        {
+            cameraPosition.x += cameraSpeed * deltaTime;
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        {
+            cameraPosition.x -= cameraSpeed * deltaTime;
+        }
+
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        {
+            cameraPosition.z += cameraSpeed * deltaTime;
+        }
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        {
+            cameraPosition.z -= cameraSpeed * deltaTime;
+        }
+
+        camera.setPosition(cameraPosition);
+        camera.updateTransform();
+    }
+
 public:
     Program()
     {
@@ -51,10 +78,12 @@ public:
 
     void runMainLoop(void)
     {
-
+        sf::Clock clock;
         while (window->isOpen())
         {
+            auto time = clock.restart();
             checkForExitConditions();
+            handleKeyboardEvents(time.asSeconds());
             canvas.clear((sf::Color){255, 0, 0});
             cube.draw(canvas, camera);
             canvas.draw(window);
