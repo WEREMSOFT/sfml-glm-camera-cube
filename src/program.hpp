@@ -1,17 +1,23 @@
 #pragma once
 #include <stdio.h>
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
+#include "fpsCounter.hpp"
 #include "constants.hpp"
 #include "canvas.hpp"
-#include "fpsCounter.hpp"
+#include "cube.hpp"
+
+#include <SFML/Graphics.hpp>
+
+#include <glm/vec3.hpp>
+
+#include <vector>
 
 class Program
 {
     sf::RenderWindow *window;
     Canvas canvas;
     FPSCounter fpsCounter;
+    Cube cube;
 
     void checkForExitConditions(void)
     {
@@ -38,6 +44,7 @@ public:
                           SCREEN_HEIGHT * WINDOW_SIZE_FACTOR),
             "3D CAMERA!!!");
         window->setFramerateLimit(60);
+        cube.initCube(100, 2);
     }
 
     void runMainLoop(void)
@@ -46,9 +53,8 @@ public:
         while (window->isOpen())
         {
             checkForExitConditions();
-            canvas.canvasI.setPixel(160, 120, (sf::Color){0, 0, 0, 255});
+            cube.draw(canvas);
             canvas.draw(window);
-
             fpsCounter.draw(window);
             window->display();
         }
