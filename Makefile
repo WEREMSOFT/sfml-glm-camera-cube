@@ -6,7 +6,7 @@ LIBS = -lsfml-window -lsfml-graphics -lsfml-system
 TARGET = bin/main.bin
 
 
-all: clean $(OBJ)
+all: clean copy_assets $(OBJ)
 	$(CC) $(FLAGS) $(OBJ) -o $(TARGET) $(LIBS)
 
 %.o: %.cpp
@@ -14,6 +14,9 @@ all: clean $(OBJ)
 
 run_main: all
 	$(TARGET)
+
+copy_assets:
+	cp -rf resources bin
 
 clean:
 	rm -rf $(OBJ) $(TARGET)
