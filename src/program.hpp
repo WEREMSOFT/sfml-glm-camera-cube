@@ -22,6 +22,8 @@ class Program
     Camera camera;
     glm::vec3 cameraPosition = camera.position;
     float cameraSpeed = 50.f;
+    float mouseSensitivity = 5.f;
+    glm::vec2 mouseLast;
 
     void checkForExitConditions(void)
     {
@@ -40,7 +42,35 @@ class Program
         }
     }
 
-    void handleKeyboardEvents(float deltaTime)
+    void handleMouse(float deltaTime)
+    {
+        auto mouseCur = getMousePosition();
+        // Y coordinates are inverted, soooo....
+        glm::vec2 deltaMouse(mouseLast.x - mouseCur.x, mouseLast.y - mouseCur.y);
+        mouseLast = mouseCur;
+        deltaMouse *= mouseSensitivity * deltaTime;
+        camera.yaw += deltaMouse.x;
+        camera.pitch += deltaMouse.y;
+
+        if (camera.pitch > 89.0)
+            camera.pitch = 89.0;
+
+        if (camera.pitch < -89.0)
+            camera.pitch = -89.0;
+
+        printf("%.2f %.2f\n", camera.yaw, camera.pitch);
+
+        // I HAVE NO IDEA WHAT I'M DOING HERE!!
+        glm::vec3 target;
+        target.x = glm::cos(glm::radians(camera.yaw)) * glm::cos(glm::radians(camera.pitch));
+        target.y = glm::sin(glm::radians(camera.pitch));
+        target.z = glm::sin(glm::radians(camera.yaw)) * glm::cos(glm::radians(camera.pitch));
+        target = glm::normalize(target) + camera.position;
+        printf("%.2f %.2f %.2f\n", target.x, target.y, target.z);
+        camera.setLookAt(target);
+    }
+
+    void handleInput(float deltaTime)
     {
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         {
@@ -61,8 +91,16 @@ class Program
             cameraPosition.z -= cameraSpeed * deltaTime;
         }
 
+        handleMouse(deltaTime);
+
         camera.setPosition(cameraPosition);
         camera.updateTransform();
+    }
+
+    glm::vec2 getMousePosition()
+    {
+        auto mousePosition = sf::Mouse::getPosition();
+        return glm::vec2(mousePosition.x, mousePosition.y);
     }
 
 public:
@@ -73,7 +111,8 @@ public:
                           SCREEN_HEIGHT * WINDOW_SIZE_FACTOR),
             "3D CAMERA!!!");
         window->setFramerateLimit(60);
-        cube.initCube(30, 1);
+        cube.initCube(30, 2);
+        mouseLast = getMousePosition();
     }
 
     void runMainLoop(void)
@@ -84,7 +123,7 @@ public:
         {
             auto time = clock.restart();
             checkForExitConditions();
-            handleKeyboardEvents(time.asSeconds());
+            handleInput(time.asSeconds());
             canvas.clear();
             cubeRotation += 0.5f * time.asSeconds();
             cube.rotate(cubeRotation, glm::vec3(1, 1, 1));

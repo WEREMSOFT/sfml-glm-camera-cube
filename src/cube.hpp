@@ -41,7 +41,10 @@ public:
         for (float x = -halfSize; x < halfSize; x += step)
             for (float y = -halfSize; y < halfSize; y += step)
                 for (float z = -halfSize; z < halfSize; z += step)
-                    cube.emplace_back((glm::vec3){x, y, z});
+                    if (z == -halfSize || z == halfSize - step ||
+                        y == -halfSize || y == halfSize - step ||
+                        x == -halfSize || x == halfSize - step)
+                        cube.emplace_back((glm::vec3){x, y, z});
     }
 
     void rotate(float angle, glm::vec3 axis)
